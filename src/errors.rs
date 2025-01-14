@@ -11,7 +11,7 @@ pub struct ErrorMessage {
 }
 
 #[derive(Debug)]
-pub struct NoURLForChainIdError;
+pub struct NoURLForChainIdError(pub u64);
 
 impl Reject for NoURLForChainIdError {}
 
@@ -60,9 +60,9 @@ pub async fn handle_rejection(err: Rejection) -> Result<impl Reply, Infallible> 
     } else if let Some(_e) = err.find::<StateNotFound>() {
         code = StatusCode::NOT_FOUND;
         message = "STATE_NOT_FOUND".to_string();
-    } else if let Some(NoURLForChainIdError) = err.find() {
+    } else if let Some(NoURLForChainIdError(chain_id)) = err.find() {
         code = StatusCode::BAD_REQUEST;
-        message = "CHAIN_ID_NOT_SUPPORTED".to_string();
+        message = format!("CHAIN_ID_NOT_SUPPORTED: {}", chain_id);
     } else if let Some(_e) = err.find::<IncorrectChainIdError>() {
         code = StatusCode::BAD_REQUEST;
         message = "INCORRECT_CHAIN_ID".to_string();

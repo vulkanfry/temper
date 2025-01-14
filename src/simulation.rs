@@ -176,7 +176,8 @@ fn chain_id_to_fork_url(chain_id: u64) -> Result<String, Rejection> {
         420 => Ok("https://goerli.optimism.io/".to_string()),
         8453 => Ok("https://base.llamarpc.com".to_string()),
         369 => Ok("https://rpc-pulsechain.g4mm4.io".to_string()),
-        _ => Err(NoURLForChainIdError.into()),
+        146 => Ok("https://rpc.soniclabs.com".to_string()),
+        _ => Err(NoURLForChainIdError(chain_id).into()),
     }
 }
 
